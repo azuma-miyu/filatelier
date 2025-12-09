@@ -58,3 +58,10 @@ env/
 ENV/
 backend/app.db
 backend/*.db
+
+# Docker
+certbot/
+postgres_data/
+
+# Deployment
+.env.production
