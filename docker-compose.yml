@@ -50,8 +50,8 @@ services:
   # Next.jsフロントエンド
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
     container_name: ec-frontend
     restart: unless-stopped
     environment:
