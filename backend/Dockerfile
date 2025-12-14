@@ -23,5 +23,5 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 5000
 
 # Gunicornで起動
-CMD ["gunicorn", "--config", "gunicorn.conf.py", "app:create_app()"]
+CMD ["gunicorn", "--config", "gunicorn.conf.py", "wsgi:app"]
 
