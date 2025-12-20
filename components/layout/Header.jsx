@@ -22,8 +22,11 @@ import { useCart } from '@/contexts/CartContext';
 export default function Header() {
   const router = useRouter();
   const { user, isAdmin, logout } = useAuth();
-  const { totalItems } = useCart();
+  const { totalItems, isInitialized } = useCart();
   const [anchorEl, setAnchorEl] = useState(null);
+  
+  // Hydration Error対策: 初期化前は0を表示
+  const displayTotalItems = isInitialized ? totalItems : 0;
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,7 +72,7 @@ export default function Header() {
                 onClick={() => router.push('/cart')}
                 aria-label="カート"
               >
-                <Badge badgeContent={totalItems} color="error">
+                <Badge badgeContent={displayTotalItems} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>

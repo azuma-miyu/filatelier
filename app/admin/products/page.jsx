@@ -53,7 +53,7 @@ export default function AdminProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await productsAPI.getAll();
+      const setProductsresponse = await productsAPI.getAll();
       setProducts(response.data);
     } catch (err) {
       console.error('商品取得エラー:', err);

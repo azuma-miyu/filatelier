@@ -86,6 +86,7 @@ export function CartProvider({ children }) {
     clearCart,
     totalItems,
     totalPrice,
+    isInitialized, // Hydration Error対策用
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
