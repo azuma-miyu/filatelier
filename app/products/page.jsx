@@ -54,16 +54,7 @@ export default function ProductsPage() {
   return (
     <>
       <Header />
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            商品一覧
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            かぎ針編みで作られたハンドメイド作品をご覧ください。心を込めて手作りした一つひとつの作品をお楽しみください。
-          </Typography>
-        </Box>
-
+      <Container maxWidth="lg" sx={{ py: 6, px: { xs: 2, sm: 3 } }}>
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
             <CircularProgress />
@@ -71,21 +62,33 @@ export default function ProductsPage() {
         )}
 
         {error && (
-          <Alert severity="warning" sx={{ mb: 2 }}>
+          <Alert severity="warning" sx={{ mb: 3 }}>
             {error}
           </Alert>
         )}
 
         {usingMock && !loading && (
-          <Alert severity="info" sx={{ mb: 2 }}>
-            ⚠️ 現在、モックデータを表示しています。バックエンドのDBをセットアップすると、実際のデータが表示されます。
+          <Alert 
+            severity="info" 
+            sx={{ 
+              mb: 3,
+              backgroundColor: '#f5f5f5',
+              color: 'text.secondary',
+              '& .MuiAlert-icon': {
+                color: 'text.secondary'
+              }
+            }}
+          >
+            モックデータを表示中
           </Alert>
         )}
 
         {!loading && products.length === 0 && (
-          <Alert severity="info">
-            現在、商品がありません。管理者が商品を追加するまでお待ちください。
-          </Alert>
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="body1" color="text.secondary">
+              現在、商品がありません
+            </Typography>
+          </Box>
         )}
 
         {!loading && products.length > 0 && (

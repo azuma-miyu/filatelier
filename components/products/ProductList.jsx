@@ -9,17 +9,17 @@ export default function ProductList({ products }) {
       sx={{
         display: 'grid',
         gridTemplateColumns: {
-          xs: '1fr',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(3, 1fr)',
+          xs: 'repeat(2, 1fr)',
+          sm: 'repeat(3, 1fr)',
+          md: 'repeat(4, 1fr)',
+          lg: 'repeat(4, 1fr)',
         },
-        gap: 3,
+        gap: { xs: 2, sm: 3, md: 4 },
+        rowGap: { xs: 3, sm: 4, md: 5 },
       }}
     >
       {products.map((product) => (
-        <Box key={product.id}>
-          <ProductCard product={product} />
-        </Box>
+        <ProductCard key={product.id} product={product} />
       ))}
     </Box>
   );

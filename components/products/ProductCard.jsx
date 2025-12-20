@@ -1,63 +1,127 @@
 'use client';
 
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Typography,
-  Button,
-  Box,
-} from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { useState } from 'react';
+import { Box, Typography, IconButton } from '@mui/material';
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import { useCart } from '@/contexts/CartContext';
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const [isHovered, setIsHovered] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.preventDefault();
     addToCart(product, 1);
   };
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardMedia
-        component="img"
-        height="200"
-        image={product.imageUrl || '/placeholder-product.jpg'}
-        alt={product.name}
-        sx={{ objectFit: 'cover' }}
-      />
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h6" component="h2" noWrap>
+    <Box
+      sx={{
+        cursor: 'pointer',
+        position: 'relative',
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* 商品画像 */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          paddingTop: '100%', // 正方形
+          backgroundColor: '#f5f5f5',
+          overflow: 'hidden',
+          mb: 1.5,
+        }}
+      >
+        <Box
+          component="img"
+          src={product.imageUrl || '/placeholder-product.jpg'}
+          alt={product.name}
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'transform 0.3s ease',
+            transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+          }}
+        />
+        
+        {/* カートに追加ボタン（ホバー時表示） */}
+        {product.stock > 0 && (
+          <IconButton
+            onClick={handleAddToCart}
+            sx={{
+              position: 'absolute',
+              bottom: 12,
+              right: 12,
+              backgroundColor: 'white',
+              opacity: isHovered ? 1 : 0,
+              transition: 'opacity 0.3s ease',
+              '&:hover': {
+                backgroundColor: 'white',
+              },
+            }}
+          >
+            <ShoppingCartOutlined sx={{ fontSize: 20 }} />
+          </IconButton>
+        )}
+        
+        {/* 在庫切れラベル */}
+        {product.stock === 0 && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              left: 12,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              color: 'white',
+              px: 1.5,
+              py: 0.5,
+              fontSize: '0.75rem',
+            }}
+          >
+            在庫切れ
+          </Box>
+        )}
+      </Box>
+
+      {/* 商品情報 */}
+      <Box sx={{ px: 0.5 }}>
+        {/* 商品名 */}
+        <Typography
+          variant="body2"
+          sx={{
+            mb: 0.5,
+            color: 'text.primary',
+            fontSize: '0.875rem',
+            lineHeight: 1.4,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+          }}
+        >
           {product.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          {product.description && product.description.length > 100
-            ? `${product.description.substring(0, 100)}...`
-            : product.description}
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6" color="primary">
-            ¥{product.price.toLocaleString()}
-          </Typography>
-          <Typography variant="body2" color={product.stock > 0 ? 'success.main' : 'error.main'}>
-            {product.stock > 0 ? `在庫: ${product.stock}` : '在庫切れ'}
-          </Typography>
-        </Box>
-      </CardContent>
-      <CardActions>
-        <Button
-          fullWidth
-          variant="contained"
-          startIcon={<AddShoppingCartIcon />}
-          onClick={handleAddToCart}
-          disabled={product.stock === 0}
+
+        {/* 価格 */}
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.primary',
+            fontWeight: 500,
+            fontSize: '0.875rem',
+          }}
         >
-          カートに追加
-        </Button>
-      </CardActions>
-    </Card>
+          ¥{product.price.toLocaleString()}
+        </Typography>
+      </Box>
+    </Box>
   );
 }
 
