@@ -155,6 +155,67 @@ npm run dev
 
 **モックデータ使用中は、商品一覧ページに警告メッセージが表示されます。**
 
+## 🖼️ 画像ファイルの配置方法
+
+### フォルダ構成
+
+```
+public/
+  ├── favicon.ico              # サイトのファビコン
+  ├── placeholder-product.jpg  # 商品画像のプレースホルダー
+  └── images/
+      ├── products/            # 商品画像フォルダ
+      │   ├── bear-001.jpg
+      │   ├── rabbit-002.jpg
+      │   └── coaster-003.jpg
+      └── banners/             # バナー画像フォルダ
+          └── hero-banner.jpg
+```
+
+### 商品画像の設定手順
+
+1. **画像ファイルを配置**
+   - `public/images/products/`に商品画像を配置
+   - 推奨サイズ: 800x800px以上
+   - 推奨フォーマット: JPG, PNG, WebP
+
+2. **モックデータを更新** (`lib/mock/products.js`)
+   ```javascript
+   {
+     id: 1,
+     name: 'かぎ針編み クマの編みぐるみ',
+     imageUrl: '/images/products/bear-001.jpg',  // ← ここを変更
+     // ...
+   }
+   ```
+
+3. **バックエンドのシードデータを更新** (`backend/seed_data.py`)
+   ```python
+   {
+       'name': 'かぎ針編み クマの編みぐるみ',
+       'image_url': '/images/products/bear-001.jpg',  # ← ここを変更
+       # ...
+   }
+   ```
+
+4. **データベースを再作成**
+   ```bash
+   cd backend
+   python seed_data.py
+   ```
+
+### ファビコンの変更
+
+1. `public/favicon.ico`を自分のファビコンに置き換える
+2. サイズ: 16x16, 32x32, 48x48 のマルチアイコン推奨
+
+### 画像アクセスURL
+
+- **商品画像**: `http://your-domain.com/images/products/bear-001.jpg`
+- **ファビコン**: `http://your-domain.com/favicon.ico`
+
+**注意**: `public/`フォルダ内のファイルは、ルート(`/`)から直接アクセス可能です。
+
 ## 🔐 認証フロー
 
 1. ユーザーがログイン
