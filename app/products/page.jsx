@@ -1,11 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Container, Typography, Box, CircularProgress, Alert } from '@mui/material';
 import { productsAPI } from '@/lib/api/client';
 import { mockProducts } from '@/lib/mock/products';
 import ProductList from '@/components/products/ProductList';
-import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+
+// Headerを動的インポート（SSRを無効化してHydration Errorを防ぐ）
+const Header = dynamic(() => import('@/components/layout/Header'), {
+  ssr: false,
+  loading: () => <Box sx={{ height: 64 }} /> // ヘッダーの高さ分の空白
+});
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -52,9 +59,9 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <Container maxWidth="lg" sx={{ py: 6, px: { xs: 2, sm: 3 } }}>
+      <Container maxWidth="lg" sx={{ py: 6, px: { xs: 2, sm: 3 }, flex: 1 }}>
         {loading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
             <CircularProgress />
@@ -95,7 +102,8 @@ export default function ProductsPage() {
           <ProductList products={products} />
         )}
       </Container>
-    </>
+      <Footer />
+    </Box>
   );
 }
 

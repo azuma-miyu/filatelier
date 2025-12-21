@@ -15,6 +15,7 @@ import {
   Tab,
 } from '@mui/material';
 import { useAuth } from '@/contexts/AuthContext';
+import Footer from '@/components/layout/Footer';
 
 export default function LoginPage() {
   const [tabValue, setTabValue] = useState(0);
@@ -67,94 +68,94 @@ export default function LoginPage() {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          py: 4,
-        }}
-      >
-        <Card sx={{ width: '100%' }}>
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="h4" component="h1" gutterBottom align="center">
-              Fil Atelier
-            </Typography>
-            
-            <Tabs value={tabValue} onChange={handleTabChange} centered sx={{ mb: 3 }}>
-              <Tab label="ログイン" />
-              <Tab label="新規登録" />
-            </Tabs>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Container maxWidth="sm" sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+        <Box
+          sx={{
+            width: '100%',
+            py: 4,
+          }}
+        >
+          <Card sx={{ width: '100%' }}>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="h4" component="h1" gutterBottom align="center">
+                Fil Atelier
+              </Typography>
+              
+              <Tabs value={tabValue} onChange={handleTabChange} centered sx={{ mb: 3 }}>
+                <Tab label="ログイン" />
+                <Tab label="新規登録" />
+              </Tabs>
 
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-
-            <form onSubmit={handleSubmit}>
-              <TextField
-                label="メールアドレス"
-                type="email"
-                fullWidth
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                margin="normal"
-                autoComplete="email"
-              />
-
-              <TextField
-                label="パスワード"
-                type="password"
-                fullWidth
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                margin="normal"
-                autoComplete={tabValue === 0 ? 'current-password' : 'new-password'}
-              />
-
-              {tabValue === 1 && (
-                <TextField
-                  label="表示名"
-                  type="text"
-                  fullWidth
-                  required
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  margin="normal"
-                  autoComplete="name"
-                />
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
               )}
 
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                size="large"
-                disabled={loading}
-                sx={{ mt: 3 }}
-              >
-                {loading
-                  ? '処理中...'
-                  : tabValue === 0
-                  ? 'ログイン'
-                  : '新規登録'}
-              </Button>
-            </form>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  label="メールアドレス"
+                  type="email"
+                  fullWidth
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  margin="normal"
+                  autoComplete="email"
+                />
 
-            {tabValue === 1 && (
-              <Typography variant="caption" display="block" sx={{ mt: 2, textAlign: 'center' }}>
-                管理者として登録する場合は、@admin.comで終わるメールアドレスを使用してください
-              </Typography>
-            )}
-          </CardContent>
-        </Card>
-      </Box>
-    </Container>
+                <TextField
+                  label="パスワード"
+                  type="password"
+                  fullWidth
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  margin="normal"
+                  autoComplete={tabValue === 0 ? 'current-password' : 'new-password'}
+                />
+
+                {tabValue === 1 && (
+                  <TextField
+                    label="表示名"
+                    type="text"
+                    fullWidth
+                    required
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    margin="normal"
+                    autoComplete="name"
+                  />
+                )}
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  disabled={loading}
+                  sx={{ mt: 3 }}
+                >
+                  {loading
+                    ? '処理中...'
+                    : tabValue === 0
+                    ? 'ログイン'
+                    : '新規登録'}
+                </Button>
+              </form>
+
+              {tabValue === 1 && (
+                <Typography variant="caption" display="block" sx={{ mt: 2, textAlign: 'center' }}>
+                  管理者として登録する場合は、@admin.comで終わるメールアドレスを使用してください
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+      </Container>
+      <Footer />
+    </Box>
   );
 }
 

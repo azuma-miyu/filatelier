@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import {
   Container,
   Typography,
@@ -14,7 +15,13 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import CartItem from '@/components/cart/CartItem';
-import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+
+// Headerを動的インポート（SSRを無効化してHydration Errorを防ぐ）
+const Header = dynamic(() => import('@/components/layout/Header'), {
+  ssr: false,
+  loading: () => <Box sx={{ height: 64 }} />
+});
 
 export default function CartPage() {
   const router = useRouter();
@@ -35,9 +42,9 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <ShoppingCartIcon sx={{ fontSize: 100, color: 'text.secondary', mb: 2 }} />
             <Typography variant="h5" gutterBottom>
@@ -55,14 +62,15 @@ export default function CartPage() {
             </Button>
           </Box>
         </Container>
-      </>
+        <Footer />
+      </Box>
     );
   }
 
   return (
-    <>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           ショッピングカート
         </Typography>
@@ -131,7 +139,8 @@ export default function CartPage() {
           </Box>
         </Box>
       </Container>
-    </>
+      <Footer />
+    </Box>
   );
 }
 

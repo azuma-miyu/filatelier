@@ -14,7 +14,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'var(--font-geist-sans), sans-serif',
+    fontFamily: 'var(--font-noto-sans-jp), "Noto Sans JP", sans-serif',
   },
 });
 
