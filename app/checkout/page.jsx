@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { stripeAPI, ordersAPI } from '@/lib/api/client';
 import Header from '@/components/layout/Header';
 
 export default function CheckoutPage() {
@@ -47,42 +46,19 @@ export default function CheckoutPage() {
     setError('');
 
     try {
-      // 1. Payment Intent作成
-      const orderItems = items.map((item) => ({
-        productId: item.product.id,
-        productName: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-      }));
-
-      await stripeAPI.createPaymentIntent({
-        amount: totalPrice,
-        items: orderItems,
-      });
-
-      // 2. モック決済処理（2秒待機）
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // 3. バリデーション
+      // バリデーション
       if (!cardNumber || !expiry || !cvc) {
         throw new Error('全てのフィールドを入力してください');
       }
 
-      // 4. 注文作成
-      await ordersAPI.create({
-        items: orderItems,
-        total: totalPrice,
-        status: 'paid',
-      });
-
-      // 5. カートクリア
+      // カートクリア
       clearCart();
 
-      // 6. 成功ページへ
+      // 成功ページへ
       router.push('/checkout/success');
     } catch (err) {
       console.error('決済エラー:', err);
-      setError(err.response?.data?.error || err.message || '決済に失敗しました');
+      setError(err.message || '決済に失敗しました');
       setProcessing(false);
     }
   };
@@ -169,15 +145,31 @@ export default function CheckoutPage() {
 
             <Button
               type="submit"
-              variant="contained"
+              variant="outlined"
               fullWidth
               size="large"
               disabled={processing}
-              sx={{ mt: 3 }}
+              sx={{ 
+                mt: 3,
+                borderColor: 'black',
+                color: 'black',
+                px: 6,
+                py: 1.5,
+                textTransform: 'none',
+                fontSize: '1rem',
+                '&:hover': {
+                  borderColor: 'black',
+                  bgcolor: 'rgba(0, 0, 0, 0.04)'
+                },
+                '&.Mui-disabled': {
+                  borderColor: 'rgba(0, 0, 0, 0.26)',
+                  color: 'rgba(0, 0, 0, 0.26)'
+                }
+              }}
             >
               {processing ? (
                 <>
-                  <CircularProgress size={24} sx={{ mr: 1 }} />
+                  <CircularProgress size={24} sx={{ mr: 1, color: 'black' }} />
                   処理中...
                 </>
               ) : (

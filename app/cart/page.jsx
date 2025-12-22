@@ -10,8 +10,9 @@ import {
   Paper,
   Divider,
   Alert,
+  Checkbox,
+  Link,
 } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import CartItem from '@/components/cart/CartItem';
@@ -25,8 +26,19 @@ const Header = dynamic(() => import('@/components/layout/Header'), {
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, totalPrice, totalItems, clearCart } = useCart();
+  const { 
+    items, 
+    totalPrice, 
+    totalItems, 
+    selectedItems,
+    toggleAllItems,
+    removeSelectedItems,
+    selectedTotalPrice,
+    selectedTotalItems
+  } = useCart();
   const { user } = useAuth();
+
+  const allSelected = items.length > 0 && selectedItems.length === items.length;
 
   const handleCheckout = () => {
     if (!user) {
@@ -36,27 +48,31 @@ export default function CartPage() {
     router.push('/checkout');
   };
 
-  const handleContinueShopping = () => {
-    router.push('/products');
-  };
-
   if (items.length === 0) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
         <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
           <Box sx={{ textAlign: 'center', py: 8 }}>
-            <ShoppingCartIcon sx={{ fontSize: 100, color: 'text.secondary', mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              カートが空です
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              商品を追加してください
+            <Typography variant="h6" gutterBottom sx={{ mb: 4 }}>
+              カートに商品がありません。
             </Typography>
             <Button
-              variant="contained"
+              variant="outlined"
               size="large"
-              onClick={handleContinueShopping}
+              onClick={() => router.push('/products')}
+              sx={{
+                borderColor: 'black',
+                color: 'black',
+                px: 6,
+                py: 1.5,
+                textTransform: 'none',
+                fontSize: '1rem',
+                '&:hover': {
+                  borderColor: 'black',
+                  bgcolor: 'rgba(0, 0, 0, 0.04)'
+                }
+              }}
             >
               商品一覧へ
             </Button>
@@ -71,10 +87,6 @@ export default function CartPage() {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
       <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          ショッピングカート
-        </Typography>
-
         {!user && (
           <Alert severity="info" sx={{ mb: 2 }}>
             決済を行うにはログインが必要です
@@ -82,58 +94,88 @@ export default function CartPage() {
         )}
 
         <Box sx={{ display: 'flex', gap: 3, flexDirection: { xs: 'column', md: 'row' } }}>
+          {/* 商品リスト */}
           <Box sx={{ flex: 1 }}>
-            {items.map((item) => (
-              <CartItem key={item.product.id} item={item} />
-            ))}
+            {/* 全選択と削除 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+              <Checkbox 
+                checked={allSelected}
+                indeterminate={selectedItems.length > 0 && selectedItems.length < items.length}
+                onChange={toggleAllItems}
+              />
+              <Link
+                component="button"
+                variant="body2"
+                color="text.secondary"
+                onClick={removeSelectedItems}
+                disabled={selectedItems.length === 0}
+                sx={{ 
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' },
+                  '&:disabled': { color: 'text.disabled', cursor: 'not-allowed' }
+                }}
+              >
+                選択商品を削除
+              </Link>
+            </Box>
+
+            {/* 商品一覧 */}
+            <Box>
+              {items.map((item) => (
+                <CartItem key={item.product.id} item={item} />
+              ))}
+            </Box>
           </Box>
 
-          <Box sx={{ width: { xs: '100%', md: 300 } }}>
+          {/* 価格サマリー */}
+          <Box sx={{ width: { xs: '100%', md: 400 } }}>
             <Paper sx={{ p: 3, position: 'sticky', top: 80 }}>
-              <Typography variant="h6" gutterBottom>
-                注文概要
-              </Typography>
-              <Divider sx={{ my: 2 }} />
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography>商品点数:</Typography>
-                <Typography>{totalItems}点</Typography>
-              </Box>
+              {/* 小計 */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <Typography>小計:</Typography>
-                <Typography>¥{totalPrice.toLocaleString()}</Typography>
-              </Box>
-              <Divider sx={{ my: 2 }} />
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                <Typography variant="h6">合計:</Typography>
-                <Typography variant="h6" color="primary">
+                <Typography variant="body1">小計</Typography>
+                <Typography variant="body1" fontWeight="500">
                   ¥{totalPrice.toLocaleString()}
                 </Typography>
               </Box>
-              <Button
-                variant="contained"
-                fullWidth
-                size="large"
-                onClick={handleCheckout}
-                sx={{ mb: 2 }}
-              >
-                決済へ進む
-              </Button>
+
+              {/* 送料 */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                <Typography variant="body1">送料</Typography>
+                <Typography variant="body1" fontWeight="500">
+                  無料
+                </Typography>
+              </Box>
+
+              <Divider sx={{ my: 2 }} />
+
+              {/* 合計金額 */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+                <Typography variant="h6">合計金額</Typography>
+                <Typography variant="h6">
+                  ¥{totalPrice.toLocaleString()}
+                </Typography>
+              </Box>
+
+              {/* 注文ボタン */}
               <Button
                 variant="outlined"
                 fullWidth
-                onClick={handleContinueShopping}
-                sx={{ mb: 1 }}
+                size="large"
+                onClick={handleCheckout}
+                sx={{ 
+                  borderColor: 'black',
+                  color: 'black',
+                  px: 6,
+                  py: 1.5,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  '&:hover': {
+                    borderColor: 'black',
+                    bgcolor: 'rgba(0, 0, 0, 0.04)'
+                  }
+                }}
               >
-                買い物を続ける
-              </Button>
-              <Button
-                variant="text"
-                fullWidth
-                color="error"
-                onClick={clearCart}
-                size="small"
-              >
-                カートを空にする
+                注文手続きへ
               </Button>
             </Paper>
           </Box>
