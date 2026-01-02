@@ -7,7 +7,7 @@ products_bp = Blueprint('products', __name__)
 
 def require_admin():
     """管理者権限チェック"""
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
     if not user or not user.is_admin:
         return jsonify({'error': '管理者権限が必要です'}), 403

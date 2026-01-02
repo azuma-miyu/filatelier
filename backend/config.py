@@ -23,5 +23,9 @@ class Config:
     
     # CORS設定
     CORS_ORIGINS = ['http://localhost:3000']
+    
+    # Stripe設定
+    STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+    STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', '')
 
 

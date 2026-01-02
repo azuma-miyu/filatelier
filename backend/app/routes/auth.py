@@ -40,8 +40,8 @@ def register():
     db.session.add(user)
     db.session.commit()
     
-    # JWTトークン発行
-    access_token = create_access_token(identity=user.id)
+    # JWTトークン発行（identityは文字列にする）
+    access_token = create_access_token(identity=str(user.id))
     
     return jsonify({
         'token': access_token,
@@ -68,8 +68,8 @@ def login():
     if not user or not user.check_password(password):
         return jsonify({'error': 'メールアドレスまたはパスワードが間違っています'}), 401
     
-    # JWTトークン発行
-    access_token = create_access_token(identity=user.id)
+    # JWTトークン発行（identityは文字列にする）
+    access_token = create_access_token(identity=str(user.id))
     
     return jsonify({
         'token': access_token,
@@ -82,7 +82,7 @@ def login():
 def get_current_user():
     """現在のユーザー情報取得"""
     user_id = get_jwt_identity()
-    user = User.query.get(user_id)
+    user = User.query.get(int(user_id))  # 文字列を整数に変換
     
     if not user:
         return jsonify({'error': 'ユーザーが見つかりません'}), 404

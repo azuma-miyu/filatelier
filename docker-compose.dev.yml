@@ -1,0 +1,33 @@
+# ローカル開発用 Docker Compose
+# PostgreSQLのみを起動し、フロントエンドとバックエンドはローカルで実行
+#
+# 使用方法:
+#   docker compose -f docker-compose.dev.yml up -d
+#
+# 停止方法:
+#   docker compose -f docker-compose.dev.yml down
+
+services:
+  # PostgreSQL データベース（開発用）
+  db:
+    image: postgres:15-alpine
+    container_name: ec-db-dev
+    ports:
+      - "5432:5432"  # ローカルからアクセス可能
+    environment:
+      POSTGRES_DB: ecshop_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_dev_data:
+    # 開発用データ永続化ボリューム
+    # 本番用のpostgres_dataとは別管理
+

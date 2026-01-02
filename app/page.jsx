@@ -1,27 +1,6 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Box, CircularProgress } from '@mui/material';
+import { redirect } from 'next/navigation';
 
 export default function HomePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push('/products');
-  }, [router]);
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-      }}
-    >
-      <CircularProgress />
-    </Box>
-  );
+  redirect('/products');
 }
 

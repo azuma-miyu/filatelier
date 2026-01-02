@@ -1,0 +1,75 @@
+// 透明背景の白いアザラシ画像 (public/logo-white.png) を用意した場合の例
+
+'use client';
+
+import { Box, Container, IconButton, Typography } from '@mui/material';
+import InstagramIcon from '@mui/icons-material/Instagram';
+
+export default function Footer() {
+  return (
+    <Box
+      component="footer"
+      sx={{
+        backgroundColor: '#87888D',
+        color: 'white',
+        py: 2,
+        mt: 'auto'
+      }}
+    >
+      <Container maxWidth="lg">
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          {/* 左側: 白いアザラシのアイコン（透明背景） */}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
+              component="img"
+              src="/logo-white.png"
+              alt="Fil Atelier"
+              sx={{
+                width: 32,
+                height: 32,
+                display: 'block'
+              }}
+            />
+          </Box>
+
+          {/* 中央: コピーライト */}
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'white',
+              fontSize: '0.875rem'
+            }}
+          >
+            © 2025 Fil Atelier
+          </Typography>
+
+          {/* 右側: Instagramアイコン */}
+          <Box>
+            <IconButton
+              component="a"
+              href="https://www.instagram.com/filatelier_azumiyu/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              sx={{
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
+              }}
+            >
+              <InstagramIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
+  );
+}
+

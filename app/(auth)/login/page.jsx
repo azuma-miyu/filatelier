@@ -135,7 +135,14 @@ export default function LoginPage() {
                   fullWidth
                   size="large"
                   disabled={loading}
-                  sx={{ mt: 3 }}
+                  sx={{ 
+                    mt: 3,
+                    backgroundColor: '#87888D',
+                    color: '#FFFFFF',
+                    '&:hover': {
+                      backgroundColor: '#6D6E72',
+                    }
+                  }}
                 >
                   {loading
                     ? '処理中...'
