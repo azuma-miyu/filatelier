@@ -4,6 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # 依存関係のインストール
+COPY .npmrc ./
 COPY package*.json ./
 RUN npm ci
 
