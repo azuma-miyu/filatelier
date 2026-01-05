@@ -32,6 +32,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-ecshop}
       ADMIN_EMAIL_DOMAIN: ${ADMIN_EMAIL_DOMAIN:-@admin.com}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
     depends_on:
       db:
         condition: service_healthy
